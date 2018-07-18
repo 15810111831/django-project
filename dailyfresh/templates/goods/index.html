@@ -1,0 +1,77 @@
+{% extends 'dj_user/base.html' %}
+{% block javascript %}
+	<script type="text/javascript" src="/static/js/slide.js"></script>
+{% endblock %}
+{% block body %}
+
+	<div class="center_con clearfix">
+		<ul class="subnav fl">
+			{% for  type in types %}
+			<li><a href="#model0{{type.id}}">{{type.ttitle}}</a></li>
+			{% endfor %}
+		</ul>
+		<div class="slide fl">
+			<ul class="slide_pics">
+				<li><img src="/static/images/slide.jpg" alt="幻灯片"></li>
+				<li><img src="/static/images/slide02.jpg" alt="幻灯片"></li>
+				<li><img src="/static/images/slide03.jpg" alt="幻灯片"></li>
+				<li><img src="/static/images/slide04.jpg" alt="幻灯片"></li>
+			</ul>
+			<div class="prev"></div>
+			<div class="next"></div>
+			<ul class="points"></ul>
+		</div>
+		<div class="adv fl">
+			<a href="#"><img src="/static/images/adv01.jpg"></a>
+			<a href="#"><img src="/static/images/adv02.jpg"></a>
+		</div>
+	</div>
+
+	{% for type in types %}
+		<div class="list_model">
+			<div class="list_title clearfix">
+				<h3 class="fl" id="model0{{type.id}}">{{type.ttitle}}</h3>
+				<div class="subtitle fl">
+					<span>|</span>
+					{% for good in type.goodsinfo_set.all %}
+						{% if good.gclick >= 10 %}
+					         <a href="#">{{good.gtitle}}</a>
+						{% endif %}
+					{% endfor%}
+				</div>
+				<a href="{% url 'goods:type' type.id 1 1 %}" class="goods_more fr" id="fruit_more">查看更多 ></a>
+			</div>
+
+			<div class="goods_con clearfix">
+				<div class="goods_banner fl"><img src="/static/images/banner0{{type.id}}.jpg"></div>
+				<ul class="goods_list fl">
+					{% for good in type.goodsinfo_set.all %}
+					<li>
+						<h4><a href="{% url 'goods:detail' type.id good.id %}">{{good.gtitle}}</a></h4>
+						<a href="{% url 'goods:detail' type.id good.id %}"><img src="/static/media/{{good.gpic}}"></a>
+						<div class="prize">¥ {{good.gprice}}</div>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+	{% endfor %}
+
+	<script type="text/javascript" src="/static/js/slideshow.js"></script>
+	<script type="text/javascript">
+		BCSlideshow('focuspic');
+		var oShownum = document.getElementById('show_count');
+		var oFruit = document.getElementById('fruit_more');
+
+		var hasorder = localStorage.getItem('order_finish');
+
+		if(hasorder)
+		{
+			oShownum.innerHTML = '2';
+		}
+
+		oFruit.onclick = function(){
+			window.location.href = 'list.html';
+		}
+	</script>
+{% endblock %}

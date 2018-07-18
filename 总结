@@ -1,0 +1,244 @@
+5.29
+虚拟环境命令：
+    worknon name
+    mkvirtualenv name
+    revirtualenv name
+    pip list
+    pip install
+
+django的命令：
+    django-admin startproject    创建项目
+    python manage.py startapp name    创建app
+    python manage.py makemigrations   数据迁移
+    python manage.py migrate          数据库同步
+    python manage.py runserver [port]   启动webservcer
+    python manage.py shell              进入shell命令编辑(一般测试用)
+    python manage.py createsuperuser    创建超级管理员
+
+admin 操作：
+    列表显示页: list_display, list_filter, list_per_page, search_fields
+    对象的添加和修改： fields, fieldsets
+    关联对象： admin.StackedInline, admin.TabularInline
+    站点注册： admin.site.register
+    站点注册继承类： admin.ModelAdmin
+
+models 操作：
+    布尔值显示不明显, 可以通过自定义方法进行封装
+    然后通过 .short_description = '性别' 指定显示名字
+    最后在通过admin注册到站点管理
+
+views 操作：
+    首先定义显示的方法, 然后进行路由配置, 也就是urls的配置, 参数第一位是正则表达式
+    输入想要匹配的路径, 参数第二位是对应的函数
+
+template 操作：
+    首先要在settings中进行模板的路径配置, 其目的是当前项目会在哪些路径下进行寻找
+
+5.30
+django模型
+    模型的字段类型：
+        AutoField            自增类型
+        BooleanField         布尔类型(False,True)
+        NullBooleanField     包含Null,False,True
+        CharField            字符类型,需要设置max_length,一般大于4000时用,TextField
+        TextField            文本类型
+        DataTimeField        日期时间类型,auto_now=False,auto_now_add = False
+        TimeField            时间类型
+        DateField            日期类型
+        IntegerField         整数类型
+        FileField            文件类型,一般在存储的时候,只存储文件的路径
+        FloatField           浮点数类型
+        DecimalField         使用python的Decimal实例表示的十进制浮点数
+        ImageField           图片类型
+
+    模型字段的选项
+        default             设置默认值
+        null                如果为True,Django讲Null存入数据库对应的键值
+        blank               如果为True,则在表单验证中可以为空
+        max_length          设置字符最大长度
+        db_index            若值为 True, 则在表中会为此字段创建索引
+        db_column           设置字段在数据库中表的名字
+        primary_key         设置字段为主键
+        unique              如果为 True, 这个字段在表中必须有唯一值
+
+    关系类型
+        ForeignKey          一对多，将字段定义在多的端中
+        ManyToManyField     多对多，将字段定义在两端中
+        OneToOneField       一对一，将字段定义在任意一端中
+
+    元选项
+        在模型类中定义类Meta，用于设置元信息
+        元信息db_table：定义数据表名称，推荐使用小写字母，数据表的默认名称
+        ordering:对象的默认排序字段
+
+    模型管理器：用于讲对象与数据库表进行映射
+
+    首先django在查询集的时候,如果两次循环使用同一个查询集,则第二次使用缓存中的数据
+    当构成两个查询集则如果两个都对查询求值,则无法缓存,会增加对数据库的负载
+
+    查询集返回集合
+        all()            返回所有集合
+        filter()         过滤,可填写参数k=v进行过滤
+        exculde()        除匹配之外的所有对象的集合
+        order_by()       按照指定方式排序,然后返回符合条件的对象的集合
+        values()         以字典的形式返回所有对象的集合
+
+    查询返回单个对象的方法
+        get()            返回单个满足条件的对象,如果没有找到则会触发DoesNotExist错误
+                         如果多条被返回,则会触发MultipleObjectsReturned错误
+        count()          返回当前查询的总条数
+        first()          返回查询结果的第一个对象
+        last()           返回查询结果的最后一个对象
+        exists()         判断查询集中是否有数据,如果有则返回True
+
+    字段查询,在filter(),exculde(),get()中添加参数
+        语法: 属性名_比较运算符=值
+    比较运算符:
+        exact: 表示相等,默认就是exact不用写
+        contains: 是否包含, 大小写敏感
+        startswich,endswich: 以value开头或结尾,大小写敏感
+        isnull,isnotnul: 是否为null
+        iexact,icontains,istartswich,iendswich前边加上i表示不区分大小写
+
+        in: [1,23,4,5] 在此合集范围查找
+        gt,gte,lt,lte: 大于, 大于等于, 小于, 小于等于
+        year, month, day, week_day, hour, minute, second: 对时间进行查询
+
+    跨关联关系查询:处理join查询
+        语法：模型类名<属性名><比较运算符> 如: heroinfo_hname_contains = '郭'
+
+    聚合:
+        使用aggregate()函数返回聚合函数的值
+        聚合函数：Avg, Count, Max, Min, Sum
+        一般count方法直接用list.count()
+
+    F对象:
+        可以使用F()将模型中的字段A与字段B进行比较
+        如： list.filter(bread__gte = F('bcomment'))
+
+    Q对象:
+        过滤方法中的关键字查询,会合并为and查询
+        如果想要进行或查询通过Q对象
+        如:
+        list.filter(Q(pk__lt=6) | Q((bcomment__gt=10))
+
+request对象:
+    属性:
+        method: 主要有GET,POST等
+        GET: 包含所有的GET的信息,属性和值,类字典对象
+             get('key')     获取对应key的单个值,如果有许多值,则只取最后一个
+             getlist('key')    获取对应key的所有值
+        POST: 包含所有的POST的信息,属性和值,类字典对象
+              get('key')
+              getlist('key')
+        path: 一个字符串,表示请求的页面的完整路径,不包含域名
+        encoding: 一个字符串,表示提交的数据的编码方式
+        COOKIES： 一个标准的python字典对象,包含所有的cookie,键和值
+        session: 一个即可读又可写的类似于字典的对象
+        FILES: 一个类似于字典的对象,包含所有的上传文件
+    方法:
+        is_ajax() 如果请求是通过XMLHTTPRequst发起的,则返回True
+
+response对象:
+    django.http模块中定义了HTTPResponse对象的API
+    HTTPRequest对象是由django自动创建的, HttpResponse对象由程序员创建
+    不用调用模板, 直接返回数据, 即响应体
+
+    属性:
+        content: 表示返回的内容,字符串类型
+        charset: 表示response采用的编码字符集,字符串类型
+        status_code: HTTP的响应状态码, 200 ok, 404,500等
+        content-type: 指定输出的MIME类型
+
+    方法:
+        init: 使用页面内容实例化HTTPResponse对象
+        write(value): 以文件的方式写
+        flush(): 以文件的方式输出至缓存去
+        set_cookie(key,value,max_age=None,expries=NOne): 设置cookie
+            key,value 都是字符类型
+            max_age 是一个整数, 表示指定多少秒数后过期
+            expries 是一个datetime或timedelta对象,指定什么时间过期
+            max_age和expries二选一
+            如果不指定过期时间,默认是2周后过期
+
+    重定向:
+        HTTPResponseRedirect(url)
+
+    子类JsonResponse:
+        返回json数据,一般用于异步请求
+        _init_(data)
+        帮助用户创建JSON编码的响应
+        参数data是字典对象
+        JsonResponse的默认Content-type是 application/json
+
+    简写函数:
+        from django.shortcuts import render, redirect
+        响应体: render(request, template_name, context)
+        重定向: redirect(to) 推荐使用此方法重定向
+
+        def index(request):
+            return redirect(reverse('booktest:index2'))
+
+得到对象或返回404:
+    get_object_or_404(klass, args, **kwargs)
+    klass: 获取对象的模型类, Manager对象, 或者 QuerySet对象
+    **kwargs: 查询的参数,格式可以被get()或者filter()接受
+
+    from django.shortcuts import *
+    def detail(request, id):
+        try:
+            book = get_object_or_404(BookInfo, pk=id)
+        except BookInfo.MultipleObjectsReturned:
+            book = None
+        return render(request, 'booktest/detail.html', {'book': book})
+    讲settings.py 中的DEBUG设置为False
+
+得到列表或者404
+    get_list_or_404(klass, args, **kwargs)
+
+    from django.shortcuts import *
+    def index(request):
+        # list = get_list_or_404(BookInfo, pk__lt=1)
+        list = get_list_or_404(BookInfo, pk__lt=6)
+        return render(request, 'booktest/index.html', {'list': list})
+
+    将settings.py中的DEBUG改为False
+
+session会话:
+    会话是一个类字典对象
+    get('key', default)
+    del request.session['key']
+    clear() 清楚所有的session
+    flush() 清楚当前会话的session和当前会话的cookie
+
+    过期时间:
+        set_expiry(value) 填入一个整数
+        如果每天则是两星期后过期
+        如果value的值为0,则在关闭浏览器后过期
+        如果为None, 则永不过期
+        如果value是一个时间对象,则会话会在当前时间加上设置的时间后过期
+
+模板:
+    变量        {{ value }}
+    标签        {% tag %}
+    注释        {# ... #}
+    过滤器       |
+
+    标签:
+        {% for ... in ...%}{% endfor %} 循环
+        {% comment %}....{% endcomment %} 在此标签内全部是注释
+        {% if %}{% elif %}{% else %}{% endif %}
+        {% csrf_token %}
+        {% autoescape %}{% endautoescape %} HTML转义
+        {% url 'name' arg1 arg2 %} url反向解析
+        {% include 'foo/bar.html' %}{% block ..%},{% extends ...%}模板继承功能
+
+    过滤器:
+        name | lower | upper
+        过滤器可以传递参数, 参数用引号包含起来
+
+
+
+
+
+
