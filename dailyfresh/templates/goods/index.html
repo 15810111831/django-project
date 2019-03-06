@@ -7,7 +7,7 @@
 	<div class="center_con clearfix">
 		<ul class="subnav fl">
 			{% for  type in types %}
-			<li><a href="#model0{{type.id}}">{{type.ttitle}}</a></li>
+			<li><a href="#model0{{type.id}}">{{type.title}}</a></li>
 			{% endfor %}
 		</ul>
 		<div class="slide fl">
@@ -30,7 +30,7 @@
 	{% for type in types %}
 		<div class="list_model">
 			<div class="list_title clearfix">
-				<h3 class="fl" id="model0{{type.id}}">{{type.ttitle}}</h3>
+				<h3 class="fl" id="model0{{type.id}}">{{type.name}}</h3>
 				<div class="subtitle fl">
 					<span>|</span>
 					{% for good in type.goodsinfo_set.all %}

@@ -22,7 +22,7 @@
 						{% elif type.id == 6 %}
 							class="ice"
 						{% endif %}
-					>{{ type.ttitle }}</a></li>
+					>{{ type.name }}</a></li>
 					{% endfor %}
 				</ul>
 			</div>
@@ -39,7 +39,7 @@
 	<div class="breadcrumb">
 		<a href="#">全部分类</a>
 		<span>></span>
-		<a href="{% url 'goods:type' type.id index 1 %}">{{type.ttitle}}</a>
+		<a href="{% url 'goods:type' type.id index 1 %}">{{type.name}}</a>
 	</div>
 
 	<div class="main_wrap clearfix">

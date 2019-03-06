@@ -25,7 +25,7 @@ SECRET_KEY = '3a(-_498*-ux2jfzs2t9nl6)47ow4)8=2su*zg&rq7v#&7roxx'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'dj_user',
     'goods',
     'tinymce',
@@ -81,9 +82,9 @@ WSGI_APPLICATION = 'dailyfresh.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dailyfresh',
+        'NAME': 'fruit',
         'USER': 'root',
-        'PASSWORD': 'mysql',
+        'PASSWORD': 'abc',
         'HOST': 'localhost',
         'PORT': 3306
     }
@@ -107,10 +108,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    ("css", os.path.join(STATIC_ROOT, 'css').replace('\\', '/')),
+    ("js", os.path.join(STATIC_ROOT, 'js').replace('\\', '/')),
+    ("images", os.path.join(STATIC_ROOT, 'images').replace('\\', '/')),
+)
+
 # STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static')
+    # os.path.join(BASE_DIR, 'static')
 # ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'meida')
