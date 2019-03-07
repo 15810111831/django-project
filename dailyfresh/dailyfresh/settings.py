@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = (
+    'bootstrap_admin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -128,3 +129,6 @@ TINYMCE_DEFAULT_CONFIG = {
     'width': 600,
     'height': 400,
 }
+
+
+BOOTSTRAP_ADMIN_SIDEBAR_MENU = True
