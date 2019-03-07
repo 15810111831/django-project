@@ -5,4 +5,5 @@ from django.apps import AppConfig
 
 
 class CartConfig(AppConfig):
-    name = '购物车'
+    name = 'cart'
+    verbose_name = '购物车管理'

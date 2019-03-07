@@ -5,4 +5,5 @@ from django.apps import AppConfig
 
 
 class UserConfig(AppConfig):
-    name = '用户管理'
+    name = 'user'
+    verbose_name = '用户管理'

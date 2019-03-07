@@ -1,5 +1,6 @@
 # coding:utf-8
 from django.db import models
+from django.contrib.auth.models import Group, Permission
 
 
 class UserInfo(models.Model):
@@ -9,6 +10,8 @@ class UserInfo(models.Model):
     uphone = models.CharField('电话', max_length=11, default='')
     uyoubian = models.CharField('邮编', max_length=6, default='')
     upeople = models.CharField('个人', max_length=10, default='')
+    groups = models.ManyToManyField(Group, verbose_name='用户组', blank=True)
+    user_permissions = models.ManyToManyField(Permission, verbose_name='权限', blank=True)
 
     class Meta:
         verbose_name = '用户信息'

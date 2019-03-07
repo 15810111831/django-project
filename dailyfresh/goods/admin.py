@@ -1,3 +1,6 @@
+# coding:utf-8
+
+from common import admin_site
 from django.contrib import admin
 from .models import TypeInfo, GoodsInfo
 
@@ -10,5 +13,5 @@ class GoodsInfoAdmin(admin.ModelAdmin):
     list_display = ['gtitle', 'gprice', 'gcontent', 'gtype']
 
 
-admin.site.register(TypeInfo, TypeInfoAdmin)
-admin.site.register(GoodsInfo, GoodsInfoAdmin)
+admin_site.register(TypeInfo, TypeInfoAdmin)
+admin_site.register(GoodsInfo, GoodsInfoAdmin)
