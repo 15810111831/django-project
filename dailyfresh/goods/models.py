@@ -12,7 +12,7 @@ class TypeInfo(models.Model):
         verbose_name_plural = '商品类别'
 
     def __str__(self):
-        return self.title
+        return self.name.encode('utf-8')
 
 
 class GoodsInfo(models.Model):

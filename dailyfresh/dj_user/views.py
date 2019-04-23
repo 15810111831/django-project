@@ -12,8 +12,8 @@ def register(request):
 
 def register_handle(request):
     if request.method == 'POST':
-        uname = request.POST['user_name']
-        upwd = request.POST['pwd']
+        uname = request.POST['uname']
+        upwd = request.POST['upwd']
         cpwd = request.POST['cpwd']
         uemail = request.POST['email']
 
@@ -25,11 +25,7 @@ def register_handle(request):
         sh1 = hashlib.sha1()
         sh1.update(upwd)
         upwd3 = sh1.hexdigest()
-        user = UserInfo()
-        user.uname = uname
-        user.upwd = upwd3
-        user.uemail = uemail
-        user.save()
+        UserInfo.objects.create(uname=uname, upwd=upwd3, uemail=uemail)
         return redirect('/user/login/')
 
 # 验证用户名是否存在
