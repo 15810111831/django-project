@@ -112,3 +112,11 @@ def site(request):
 
 def order(request):
     return render(request, 'dj_user/user_center_order.html')
+
+
+def cart(request):
+    return render(request, 'goods/cart.html')
+
+
+def place_order(request):
+    return render(request, 'dj_user/place_order.html')
